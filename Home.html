@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rwanda Updates</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f9f9f9;
+    }
+
+    .header {
+      background-color: #007BFF;
+      color: white;
+      text-align: center;
+      padding: 30px 10px;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .user-info {
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .logout-button {
+      background-color: #ff4d4d;
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 15px auto;
+      display: block;
+    }
+
+    .news-form input, .news-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .news-form input[type="file"] {
+      padding: 5px;
+    }
+
+    .news-form button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .news-form button:hover {
+      background-color: #0056b3;
+    }
+
+    .news-item {
+      border-bottom: 1px solid #ddd;
+      padding: 15px 0;
+    }
+
+    .news-item img {
+      max-width: 100%;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .news-item button {
+      margin-right: 10px;
+      padding: 5px 12px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .edit-btn {
+      background-color: orange;
+      color: white;
+    }
+
+    .delete-btn {
+      background-color: red;
+      color: white;
+    }
+
+    .footer {
+      text-align: center;
+      margin: 40px 0 10px;
+      color: #777;
+      font-size: 15px;
+    }
+
+    .footer a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+
+    .herve-signature {
+      font-size: 20px;
+      font-weight: bold;
+      color: #FFD700;
+      text-transform: uppercase;
+      margin-top: 20px;
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">🇷🇼 Rwanda Updates - Murakaza neza</div>
+
+  <div class="container">
+    <h2 style="text-align:center; color:#007BFF;">Murakaza neza kuri Rwanda Updates</h2>
+
+    <div class="user-info">
+      <p><strong>Amazina:</strong> <span id="userName">---</span></p>
+      <p><strong>Email:</strong> <span id="userEmail">---</span></p>
+    </div>
+
+    <button class="logout-button" onclick="logout()">Sohoka (Logout)</button>
+
+    <div class="news-form">
+      <h3>📝 Andika Inkuru Nshya</h3>
+      <input type="text" id="news-title" placeholder="Umutwe w’inkuru" />
+      <textarea id="news-body" rows="4" placeholder="Ibisobanuro by’inkuru..."></textarea>
+      <input type="file" id="news-image" accept="image/*" />
+      <button onclick="addNews()">Ohereza Inkuru</button>
+    </div>
+
+    <div class="news-section">
+      <h3>📰 Amakuru Agezweho</h3>
+      <div id="news-list"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>© 2025 Rwanda Updates|by hirwa herve</p>
+
+    <p>
+      📞 Call & WhatsApp: 
+      <a href="tel:+250798718905">0798718905</a><br />
+      📧 Email: 
+      <a href="mailto:herve0358@gmail.com">herve0358@gmail.com</a>
+    </p>
+
+    <p style="margin-top: 10px;">
+      🔗 Dukurikire kuri:
+      <a href="https://www.facebook.com/herveruccy.hirwafazzo" target="_blank">Facebook</a> |
+      <a href="https://www.instagram.com/hervin_rw" target="_blank">Instagram</a>
+    </p>
+
+    <div class="herve-signature">By Hirwa Herve</div>
+  </div>
+
+  <script>
+    const allowedAdmins = ["herve0358@gmail.com", "hirwakevin718@gmail.com"];
+    const name = localStorage.getItem("userName");
+    const email = localStorage.getItem("userEmail");
+
+    if (name && email) {
+      document.getElementById("userName").textContent = name;
+      document.getElementById("userEmail").textContent = email;
+
+      if (!allowedAdmins.includes(email)) {
+        const newsForm = document.querySelector(".news-form");
+        newsForm.innerHTML = `<div style="color: red; font-weight: bold; padding: 10px; border: 1px solid red; border-radius: 5px; background-color: #ffe6e6;">
+          🛑 Ntubifitiye uburenganzira bwo gutangaza inkuru kuri uru rubuga.
+        </div>`;
+      }
+    } else {
+      window.location.href = "login.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userEmail");
+      window.location.href = "login.html";
+    }
+
+    function addNews() {
+      const title = document.getElementById("news-title").value.trim();
+      const body = document.getElementById("news-body").value.trim();
+      const imageInput = document.getElementById("news-image");
+      const date = new Date().toLocaleString('rw-RW');
+
+      if (!title || !body) {
+        alert("Injiza umutwe n’ibisobanuro by’inkuru!");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        const imageUrl = reader.result;
+        const newsItem = { title, body, image: imageUrl, date };
+        let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+        newsList.unshift(newsItem);
+        localStorage.setItem("newsList", JSON.stringify(newsList));
+        clearForm();
+        displayNews();
+      };
+
+      if (imageInput.files.length > 0) {
+        reader.readAsDataURL(imageInput.files[0]);
+      } else {
+        const newsItem = { title, body, image: "", date };
+        let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+        newsList.unshift(newsItem);
+        localStorage.setItem("newsList", JSON.stringify(newsList));
+        clearForm();
+        displayNews();
+      }
+    }
+
+    function clearForm() {
+      document.getElementById("news-title").value = "";
+      document.getElementById("news-body").value = "";
+      document.getElementById("news-image").value = "";
+    }
+
+    function displayNews() {
+      const newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+      const container = document.getElementById("news-list");
+      container.innerHTML = "";
+
+      if (newsList.length === 0) {
+        container.innerHTML = "<p>Nta nkuru irashyirwa kuri uru rubuga.</p>";
+        return;
+      }
+
+      newsList.forEach((news, index) => {
+        const div = document.createElement("div");
+        div.className = "news-item";
+        div.innerHTML = `
+          <h4>${news.title}</h4>
+          <p>${news.body}</p>
+          ${news.image ? `<img src="${news.image}" alt="thumbnail" />` : ""}
+          <p><small><i>Yashyizweho: ${news.date}</i></small></p>
+        `;
+
+        if (allowedAdmins.includes(email)) {
+          div.innerHTML += `
+            <button class="edit-btn" onclick="editNews(${index})">Hindura</button>
+            <button class="delete-btn" onclick="deleteNews(${index})">Siba</button>
+          `;
+        }
+
+        container.appendChild(div);
+      });
+    }
+
+    function deleteNews(index) {
+      let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+      if (confirm("Urashaka koko gusiba iyi nkuru?")) {
+        newsList.splice(index, 1);
+        localStorage.setItem("newsList", JSON.stringify(newsList));
+        displayNews();
+      }
+    }
+
+    function editNews(index) {
+      let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+      const news = newsList[index];
+      const newTitle = prompt("Hindura umutwe w’inkuru:", news.title);
+      const newBody = prompt("Hindura ibisobanuro by’inkuru:", news.body);
+
+      if (newTitle && newBody) {
+        news.title = newTitle.trim();
+        news.body = newBody.trim();
+        news.date = new Date().toLocaleString('rw-RW');
+        newsList[index] = news;
+        localStorage.setItem("newsList", JSON.stringify(newsList));
+        displayNews();
+      }
+    }
+
+    displayNews();
+  </script>
+</body>
+</html>
